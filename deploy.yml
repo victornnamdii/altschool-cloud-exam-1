@@ -1,0 +1,19 @@
+---
+- name: Deploy LAMP Stack
+  hosts: slave
+  remote_user: vagrant
+
+  tasks:
+  - name: Run bash script
+    become: true
+    script: /vagrant/lamp.sh
+  - name: Cron Job to check uptime every 12am
+    ansible.builtin.cron:
+      name:  "Server's Uptime"
+      state: present
+      minute: "0"
+      hour: "0"
+      day: "*"
+      month: "*"
+      weekday: "*"
+      job: "uptime"
