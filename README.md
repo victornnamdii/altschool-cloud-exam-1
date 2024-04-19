@@ -294,6 +294,8 @@ As seen in the image above, the ansible playbook runs two tasks on my `slave` se
 
     - By default, vagrant will mount a shared folder between  my host directory containing the Vagrantfile and `/vagrant` directory on the virtual machine. Hence, the [lamp.sh](lamp.sh) file will be located at `/vagrant/lamp.sh` on the `Master` node.
 
+    - The `script` module copies annd executes the script on the `Slave` node.
+
 - The second task named `Cron Job to check uptime every 12am` creates a con job that checks the server's uptime every day at 12am.
 
     - The state "present" ensures the cron job is created.
