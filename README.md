@@ -2,10 +2,10 @@
 
 This repo contains my solution for my altschool second semester examination.
 
-**Name: Ilodiuba Victor Nnamdi**
-**School: School of Engineering**
-**Track: Cloud Engineering**
-**ID No: ALT/SOE/023/3812**
+- **Name: Ilodiuba Victor Nnamdi**
+- **School: School of Engineering**
+- **Track: Cloud Engineering**
+- **ID No: ALT/SOE/023/3812**
 
 ## Table of Contents
 
