@@ -40,7 +40,7 @@ clear
 
 clear
 
-if ! [ -f ~/laravel ]; then
+if ! [ -f /home/vagrant/laravel ]; then
 	echo "Cloning Laravel Repo from GitHub..."
 	git clone https://github.com/laravel/laravel.git
 	clear
@@ -87,6 +87,7 @@ systemctl restart apache2
 echo "Setting correct permissions for files..."
 chmod -R  755 /var/www/html/*
 chown -R vagrant:vagrant /var/www/html/*
+php /var/www/html/public/index.php > /dev/null
 clear
 
 echo "LAMP stack successfully Installed!!"

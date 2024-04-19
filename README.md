@@ -49,14 +49,20 @@ This repo contains my solution for my altschool second semester examination.
 
 ## Solution
 
-- On my host system, i created a directory name `altschool-cloud-exam-1` in home directory using `mkdir altschool-cloud-exam-1` and changed my working directory to it using `cd altschool-cloud-exam-1`.
+- On my host system, i created a directory named `altschool-cloud-exam-1` in my home directory and navigated to it using:
 
-- I created a bash script named [lamp.sh](lamp.sh) containing commands to Install a Linux, Apache, MySQL, PHP stack. This bash script also configures firewall rules, creates a database and user for the MySQL server, install the necessary dependencies and extensions for the laravel app. For a breakdown of the bash script, see [Bash script breakdown](#bash-script-breakdown).
+```bash
+
+mkdir altschool-cloud-exam-1 && cd altschool-cloud-exam-1
+
+```
+
+- I created a bash script named [lamp.sh](lamp.sh) containing commands to Install a Linux, Apache, MySQL, PHP stack. This bash script also configures firewall rules, creates a database and user for the MySQL server, install the necessary dependencies and extensions for the laravel app. For an explanation of the bash script, see [Bash script breakdown](#bash-script-breakdown).
 
 - This is what the apache base directory looks like after the script is successfully completed:
 ![apache directory](./images/base.png)
 
-- I created a Vagrantfile using `vagrant init` and edited the configurations of the file to provision two servers named `Master` and `Slave` as seen in the file [Vagrantfile](./Vagrantfile). For a breakdown of the Vagrantfile, see [Vagrantfile breakdown](#vagrantfile-breakdown).
+- I created a Vagrantfile using `vagrant init` and edited the configurations of the file to provision two servers named `Master` and `Slave` as seen in the file [Vagrantfile](./Vagrantfile). For an explanation of the Vagrantfile, see [Vagrantfile breakdown](#vagrantfile-breakdown).
 
 - I then deployed the servers using `vagrant up`.
 ![Server Deployment](./images/deploying.png)
@@ -65,11 +71,11 @@ This repo contains my solution for my altschool second semester examination.
 ![ssh master](./images/ssh-master.png)
 
 - Then i installed ansible as shown in the pictures below:
-    - `sudo apt install software-properties-common`
+    - `sudo apt install -y software-properties-common`
 ![installation-1](./images/ansible-1.png)
     - `sudo add-apt-repository --yes --update ppa:ansible/ansible`
 ![installation-2](./images/ansible-2.png)
-    - `sudo apt install ansible`
+    - `sudo apt install -y ansible`
 ![installation-3](./images/ansible-3.png)
 
 - Then i created a new ssh key pair using `ssh-keygen`.
@@ -86,12 +92,28 @@ mkdir ansible && cd ansible
 
 ```
 
-- In this directory, i created my [ansible playbook](deploy.yml) to execute the [lamp.sh](lamp.sh) bash script on the Slave node and create a cron job and my [host inventory](./host-inventory) named `deploy.yml` and `host-inventory` respectively. For a breakdown of the playbook, see [Playbook breakdown](#playbook-breakdown).
+- In this directory, i created my [ansible playbook](deploy.yml) to execute the [lamp.sh](lamp.sh) bash script on the Slave node and create a cron job and my [host inventory](./host-inventory) named [deploy.ym](deploy.yml) and `host-inventory` respectively. For an explanation of the playbook, see [Playbook breakdown](#playbook-breakdown).
 
-- I then checked my playbook using `ansible-playbook -i host-inventory deploy.yml --check`  and no error was returned.
+- I then checked my playbook using
+
+```bash
+
+ansible-playbook -i host-inventory deploy.yml --check
+
+```
+
+and no error was returned.
 ![ansible check](./images/check.png)
 
-- Then i ran my ansible playbook using `ansible-playbook -i host-inventory deploy.yml` and all tasks were successfully completed.
+- Then i ran my ansible playbook using
+
+```bash
+
+ansible-playbook -i host-inventory deploy.yml
+
+```
+
+and all tasks were successfully completed.
 ![run playbook](./images/run-playbook.png)
 
 - This is a screenshot of the PHP app running on the `Master` node:
@@ -168,7 +190,7 @@ clear
 
 ```bash
 
-if ! [ -f ~/laravel ]; then
+if ! [ -f /home/vagrant/laravel ]; then
 	echo "Cloning Laravel Repo from GitHub..."
 	git clone https://github.com/laravel/laravel.git
 	clear
@@ -187,7 +209,7 @@ clear
 
 if ! [ -f /usr/local/bin/composer ]; then
 	echo "Installing Composer..."
-	wget https://getcomposer.org/download/2.6.6/composer.phar # Downloads the composer.phar  file
+	wget https://getcomposer.org/download/2.6.6/composer.phar # Downloads the composer.phar file
 	chmod u+x composer.phar
 	mv composer.phar /usr/local/bin/composer
 	chown vagrant /usr/local/bin/composer
@@ -196,7 +218,7 @@ clear
 
 echo "Installing App Dependencies..."
 cd /var/www/html/
-composer update
+composer update # Creates a composer.lock file
 composer install
 clear
 
@@ -229,6 +251,8 @@ clear
 
 ```
 
+> The sed command looks for the string `DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm` which is the default DirectoryIndex configuration for apache in the file `/etc/apache2/mods-enabled/dir.conf` and replaces it with `DirectoryIndex /public/index.php` which routes to the correct location for the Laravel app. The DirectoryIndex sets the list of resources to look for when the client requests a directory.
+
 - Then it restarts the apache service using:
 
 ```bash
@@ -242,11 +266,13 @@ systemctl restart apache2
 echo "Setting correct permissions for files..."
 chmod -R  755 /var/www/html/*
 chown -R vagrant:vagrant /var/www/html/*
-clear
+php /var/www/html/public/index.php > /dev/null # Tries to run the app
 
 ```
 
 `755` means the user has read,  write and  execute permissions, the group has read and execute permissions and others have read and execute permission.
+
+----
 
 ### Vagrantfile breakdown
 
@@ -256,6 +282,8 @@ As seen in the image above, the configuration of the vagrantfile is set to provi
 
 - For the Master server, the `master.vm.provision` line configures vagrant to use the shell provisioner to set up the machine with the bash script file [lamp.sh](lamp.sh).
 
+----
+
 ### Playbook breakdown
 
 ![Ansible Playbook](./images/playbook.png)
@@ -264,10 +292,20 @@ As seen in the image above, the ansible playbook runs two tasks on my `slave` se
 
 - The first task named `Run bash script` uses the [lamp.sh](lamp.sh) bash script to deploy the LAMP stack, install all required packages and run the correct configurations on the `slave` server.
 
+    - By default, vagrant will mount a shared folder between  my host directory containing the Vagrantfile and `/vagrant` directory on the virtual machine. Hence, the [lamp.sh](lamp.sh) file will be located at `/vagrant/lamp.sh` on the `Master` node.
+
 - The second task named `Cron Job to check uptime every 12am` creates a con job that checks the server's uptime every day at 12am.
+
+    - The state "present" ensures the cron job is created.
+    
+    - The configuration `minute: "0"`, `hour: "0"`, `day: "*"`, `month:  "*"`, `weekday:"*"` sets the cron job to run at minute 0 of the first hour of everyday  of month, which translates to everyday at 12am.
+
+    - The job "uptime" is the command used to check for a server's uptime.
 
 - My host inventory contains only the `slave` server as shown below:
 
 ![Host Inventory](./images/hosts.png)
 
-- The `ansible_user=vagrant` tells ansible to SSH to the `vagrant` user instead of the `root` user.
+- The `192.168.33.11` is the IP address of the `slave` node.
+
+- The `ansible_user=vagrant` tells ansible to SSH as the `vagrant` user instead of the `root` user.
