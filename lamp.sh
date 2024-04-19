@@ -77,6 +77,10 @@ php artisan key:generate
 php artisan migrate:refresh
 clear
 
+echo "Changing Default Apache DirectoryIndex..."
+sed -i 's@DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm@DirectoryIndex /public/index.php@g' /etc/apache2/mods-enabled/dir.conf
+clear
+
 echo "Restarting Apache Service..."
 systemctl restart apache2
 

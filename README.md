@@ -219,6 +219,16 @@ clear
 
 ```
 
+- Then it changes the apache directory index to serve the `/public/index.php` file in the laravel project instead of the default apache directory index using:
+
+```bash
+
+echo "Changing Default Apache DirectoryIndex..."
+sed -i 's@DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm@DirectoryIndex /public/index.php@g' /etc/apache2/mods-enabled/dir.conf
+clear
+
+```
+
 - Then it restarts the apache service using:
 
 ```bash
