@@ -43,9 +43,9 @@ This repo contains my solution for my altschool second semester examination.
 
 ## Required files
 
-- [Bash Script](lamp.sh)
+- [Bash Script](lamp.sh) - [lamp.sh](lamp.sh)
 
-- [Ansible Playbook](deploy.yml)
+- [Ansible Playbook](deploy.yml) - [deploy.yml](deploy.yml)
 
 ## Solution
 
