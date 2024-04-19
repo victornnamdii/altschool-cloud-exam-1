@@ -300,7 +300,7 @@ As seen in the image above, the ansible playbook runs two tasks on my `slave` se
 
     - The state "present" ensures the cron job is created.
     
-    - The configuration `minute: "0"`, `hour: "0"`, `day: "*"`, `month:  "*"`, `weekday:"*"` sets the cron job to run at minute 0 of the first hour of everyday  of month, which translates to everyday at 12am.
+    - The configuration `minute: "0"`, `hour: "0"`, `day: "*"`, `month:  "*"`, `weekday:"*"` sets the cron job to run at minute 0 of the first hour of everyday  of every month, which translates to everyday at 12am.
 
     - The job "uptime" is the command used to check for a server's uptime.
 
