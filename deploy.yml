@@ -16,4 +16,4 @@
       day: "*"
       month: "*"
       weekday: "*"
-      job: "uptime"
+      job: "uptime >> /var/log/slave_uptime.log"

@@ -302,7 +302,7 @@ As seen in the image above, the ansible playbook runs two tasks on my `slave` se
     
     - The configuration `minute: "0"`, `hour: "0"`, `day: "*"`, `month:  "*"`, `weekday:"*"` sets the cron job to run at minute 0 of the first hour of everyday  of every month, which translates to everyday at 12am.
 
-    - The job "uptime" is the command used to check for a server's uptime.
+    - The job "uptime >> /var/log/salve_uptime.log" is the command used to check for a server's uptime and logs it in the file `/var/log/salve_uptime.log`.
 
 - My host inventory contains only the `slave` server as shown below:
 
