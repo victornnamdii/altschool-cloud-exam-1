@@ -7,6 +7,13 @@
   - name: Run bash script
     become: true
     script: /vagrant/lamp.sh
+  - name: Confirm app accesibility
+    uri:
+      url: http://192.168.33.11
+      return_content: true
+    register: this
+    failed_when: this.status != 200
+    ignore_errors: true
   - name: Cron Job to check uptime every 12am
     ansible.builtin.cron:
       name:  "Server's Uptime"

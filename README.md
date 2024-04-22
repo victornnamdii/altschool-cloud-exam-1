@@ -288,7 +288,7 @@ As seen in the image above, the configuration of the vagrantfile is set to provi
 
 ![Ansible Playbook](./images/playbook.png)
 
-As seen in the image above, the ansible playbook runs two tasks on my `slave` server.
+As seen in the image above, the ansible playbook runs three tasks on my `slave` server.
 
 - The first task named `Run bash script` uses the [lamp.sh](lamp.sh) bash script to deploy the LAMP stack, install all required packages and run the correct configurations on the `slave` server.
 
@@ -296,13 +296,15 @@ As seen in the image above, the ansible playbook runs two tasks on my `slave` se
 
     - The `script` module copies annd executes the script on the `Slave` node.
 
-- The second task named `Cron Job to check uptime every 12am` creates a con job that checks the server's uptime every day at 12am.
+- The second task named `Confirm app accessibility` uses the uri module to confirm if the app is accessible. It confirms that the status code of the the response is `200` whic is a successful response.
+
+- The third task named `Cron Job to check uptime every 12am` creates a con job that checks the server's uptime every day at 12am.
 
     - The state "present" ensures the cron job is created.
     
     - The configuration `minute: "0"`, `hour: "0"`, `day: "*"`, `month:  "*"`, `weekday:"*"` sets the cron job to run at minute 0 of the first hour of everyday  of every month, which translates to everyday at 12am.
 
-    - The job "uptime >> /var/log/salve_uptime.log" is the command used to check for a server's uptime and logs it in the file `/var/log/salve_uptime.log`.
+    - The job "uptime >> /var/log/salve_uptime.log" is the command used to check for a server's uptime and logs it in the file `/var/log/slave_uptime.log`.
 
 - My host inventory contains only the `slave` server as shown below:
 
